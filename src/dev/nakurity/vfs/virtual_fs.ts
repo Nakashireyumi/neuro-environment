@@ -1,5 +1,5 @@
 // Types
-interface File {
+export interface File {
   type: "file";
   name: string;
   content: string;
@@ -7,7 +7,7 @@ interface File {
   updatedAt: Date;
 }
 
-interface Directory {
+export interface Directory {
   type: "dir";
   name: string;
   children: (File | Directory)[];
@@ -15,9 +15,9 @@ interface Directory {
   updatedAt: Date;
 }
 
-type Node = File | Directory;
+export type Node = File | Directory;
 
-class VirtualFS {
+export class VirtualFS {
   root: Directory;
 
   constructor() {
@@ -249,7 +249,7 @@ class VirtualFS {
 }
 
 // --- Example usage ---
-const vfs = new VirtualFS();
+export const vfs = new VirtualFS();
 vfs.mkdir("/docs");
 vfs.createFile("/docs/readme.txt", "Hello Virtual FS!");
 console.log(vfs.readFile("/docs/readme.txt")); // Hello Virtual FS!
