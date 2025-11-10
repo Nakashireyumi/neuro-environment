@@ -44,11 +44,11 @@ process.stdin.on("data", async (chunk) => {
     }
 
     const { id, method, params } = msg;
-    if (!method || !(method in methods)) {
-      process.stdout.write(JSON.stringify({ id, error: { message: `Unknown method: ${method}` } }) + "\n\n");
+    if (!methods[method]) {
+      process.stdout.write(JSON.stringify({ id, error: { message: `Unknown method ${method}` } }) + DELIM);
       continue;
     }
-
+  
     try {
       const revivedParams = Array.isArray(params) ? params.map(reviveDates) : reviveDates(params);
       const result = await methods[method](...(Array.isArray(revivedParams) ? revivedParams : [revivedParams]));
