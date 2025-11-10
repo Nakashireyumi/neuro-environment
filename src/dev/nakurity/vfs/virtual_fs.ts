@@ -118,6 +118,31 @@ class VirtualFS {
     newParent.updatedAt = new Date();
   }
 
+  // --- Async wrappers ---
+  async createFileAsync(path: string, content: string, overwrite = false): Promise<void> {
+    return Promise.resolve(this.createFile(path, content, overwrite));
+  }
+
+  async readFileAsync(path: string): Promise<string> {
+    return Promise.resolve(this.readFile(path));
+  }
+
+  async unlinkAsync(path: string): Promise<void> {
+    return Promise.resolve(this.unlink(path));
+  }
+
+  async mkdirAsync(path: string): Promise<void> {
+    return Promise.resolve(this.mkdir(path));
+  }
+
+  async readdirAsync(path: string): Promise<string[]> {
+    return Promise.resolve(this.readdir(path));
+  }
+
+  async renameAsync(oldPath: string, newPath: string): Promise<void> {
+    return Promise.resolve(this.rename(oldPath, newPath));
+  }
+
   // --- Helpers ---
   private getOrCreateDir(parts: string[]): Directory {
     let current = this.root;
