@@ -143,6 +143,44 @@ class VirtualFS {
     }
   }
 
+  exists(path: string): boolean {
+    return !!this.findNode(path);
+  }
+
+  writeFile(path: string, content: string) {
+    const node = this.findNode(path);
+    if (!node) throw new Error("File not found");
+    if (node.type !== "file") throw new Error("Path is not a file");
+    node.content = content;
+    node.updatedAt = new Date();
+  }
+
+  appendFile(path: string, content: string) {
+    const node = this.findNode(path);
+    if (!node) throw new Error("File not found");
+    if (node.type !== "file") throw new Error("Path is not a file");
+    node.content += content;
+    node.updatedAt = new Date();
+  }
+
+  // --- Saving & Loading ---
+  save(): string {
+    // Serialize with ISO dates
+    return JSON.stringify(this.root, null, 2);
+  }
+
+  load(json: string) {
+    const reviveDates = (node: any): Node => {
+      node.createdAt = new Date(node.createdAt);
+      node.updatedAt = new Date(node.updatedAt);
+      if (node.type === "dir") {
+        node.children = node.children.map(reviveDates);
+      }
+      return node;
+    };
+    this.root = reviveDates(JSON.parse(json)) as Directory;
+  }
+
   // --- Async wrappers ---
   async statAsync(path: string): Promise<Stats> {
     return Promise.resolve(this.stat(path));
