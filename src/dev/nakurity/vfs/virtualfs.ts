@@ -250,6 +250,33 @@ export class VirtualFS {
 
 // --- Example usage ---
 export const vfs = new VirtualFS();
+
+export const methods = {
+  createFile: (path: string, content: string, overwrite?: boolean) =>
+    vfs.createFile(path, content, overwrite ?? false),
+  readFile: (path: string) => vfs.readFile(path),
+  unlink: (path: string) => vfs.unlink(path),
+  mkdir: (path: string) => vfs.mkdir(path),
+  readdir: (path: string) => vfs.readdir(path),
+  rename: (oldPath: string, newPath: string) => vfs.rename(oldPath, newPath),
+  stat: (path: string) => vfs.stat(path),
+  exists: (path: string) => vfs.exists(path),
+  writeFile: (path: string, content: string) => vfs.writeFile(path, content),
+  appendFile: (path: string, content: string) => vfs.appendFile(path, content),
+  save: () => vfs.save(),
+  load: (json: string) => vfs.load(json),
+
+  // async wrappers
+  statAsync: (path: string) => vfs.statAsync(path),
+  createFileAsync: (path: string, content: string, overwrite?: boolean) =>
+    vfs.createFileAsync(path, content, overwrite ?? false),
+  readFileAsync: (path: string) => vfs.readFileAsync(path),
+  unlinkAsync: (path: string) => vfs.unlinkAsync(path),
+  mkdirAsync: (path: string) => vfs.mkdirAsync(path),
+  readdirAsync: (path: string) => vfs.readdirAsync(path),
+  renameAsync: (oldPath: string, newPath: string) => vfs.renameAsync(oldPath, newPath),
+};
+
 vfs.mkdir("/docs");
 vfs.createFile("/docs/readme.txt", "Hello Virtual FS!");
 console.log(vfs.readFile("/docs/readme.txt")); // Hello Virtual FS!
