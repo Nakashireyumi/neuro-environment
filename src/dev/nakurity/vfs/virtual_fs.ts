@@ -118,7 +118,36 @@ class VirtualFS {
     newParent.updatedAt = new Date();
   }
 
+  // --- Stat method ---
+  stat(path: string): Stats {
+    const node = this.findNode(path);
+    if (!node) throw new Error("Path not found");
+
+    if (node.type === "file") {
+      return {
+        type: "file",
+        name: node.name,
+        size: node.content.length,
+        createdAt: node.createdAt,
+        updatedAt: node.updatedAt,
+      };
+    } else {
+      return {
+        type: "dir",
+        name: node.name,
+        size: node.children.length, // number of entries
+        createdAt: node.createdAt,
+        updatedAt: node.updatedAt,
+        childrenCount: node.children.length,
+      };
+    }
+  }
+
   // --- Async wrappers ---
+  async statAsync(path: string): Promise<Stats> {
+    return Promise.resolve(this.stat(path));
+  }
+
   async createFileAsync(path: string, content: string, overwrite = false): Promise<void> {
     return Promise.resolve(this.createFile(path, content, overwrite));
   }
